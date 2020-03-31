@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TuristMap</string>
+    <string name="toast">Hello World</string>
+    <string name="title_activity_main3">Main3Activity</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+</resources>
