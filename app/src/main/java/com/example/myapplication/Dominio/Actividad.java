@@ -15,19 +15,16 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class Evento {
-    private int Id;
-    private String Codigo;
-    private String Nombre;
-    private String FechaInicio;
-    private String FechaFin;
-    private String Descripcion;
-    private String RutaFoto;
+public class Actividad {
+    public int Id;
+    public String Codigo;
+    public String Nombre;
+    public String Descripcion;
+    public String RutaFoto;
 
-    public Evento() {
+    public Actividad() {
     }
 
     public int getId() {
@@ -54,22 +51,6 @@ public class Evento {
         Nombre = nombre;
     }
 
-    public String getFechaInicio() {
-        return FechaInicio;
-    }
-
-    public void setFechaInicio(String fechaInicio) {
-        FechaInicio = fechaInicio;
-    }
-
-    public String getFechaFin() {
-        return FechaFin;
-    }
-
-    public void setFechaFin(String fechaFin) {
-        FechaFin = fechaFin;
-    }
-
     public String getDescripcion() {
         return Descripcion;
     }
@@ -91,59 +72,52 @@ public class Evento {
         SQLiteDatabase db = admin.getWritableDatabase();
 
         ContentValues registro = new ContentValues();
-        registro.put("id_evento", this.Id);
+        registro.put("id_actividad", this.Id);
         registro.put("codigo", this.Codigo);
         registro.put("nombre", this.Nombre);
-        registro.put("fecha_inicio", this.FechaInicio);
-        registro.put("fecha_fin", this.FechaFin);
         registro.put("descripcion", this.Descripcion);
         registro.put("ruta_foto", this.RutaFoto);
-
-
-        db.insert("Evento", null, registro);
+        db.insert("Actividad", null, registro);
         db.close();
     }
 
-    public Evento Find(Context context, int id){
+    public Actividad Find(Context context, int id){
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
         SQLiteDatabase db = admin.getWritableDatabase();
 
-        String sql = "select * from Evento where id_evento="+id;
+        String sql = "select * from Actividad where id_actividad="+id;
         Cursor cursor = db.rawQuery(sql, null);
 
         if (cursor.moveToFirst()){
             this.Id = Integer.parseInt(cursor.getString(0));
             this.Codigo = cursor.getString(1);
             this.Nombre = cursor.getString(2);
-            this.FechaInicio = cursor.getString(3);
-            this.FechaFin = cursor.getString(4);
-            this.Descripcion = cursor.getString(5);
-            this.RutaFoto = cursor.getString(6);
+            this.Descripcion = cursor.getString(3);
+            this.RutaFoto = cursor.getString(4);
 
             return this;
         }
+        db.close();
         return null;
     }
 
-    public static List<Evento> FindAll(Context context){
+    public static List<Actividad> FindAll(Context context){
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
         SQLiteDatabase db = admin.getWritableDatabase();
-        List<Evento> lista = new ArrayList<>();
+        List<Actividad> lista = new ArrayList<>();
 
-        String sql = "select * from Evento";
+        String sql = "select * from Actividad";
         Cursor cursor = db.rawQuery(sql, null);
 
         if (cursor.moveToFirst()){
             do{
-                Evento evento = new Evento();
-                evento.Id = Integer.parseInt(cursor.getString(0));
-                evento.Codigo = cursor.getString(1);
-                evento.Nombre = cursor.getString(2);
-                evento.FechaInicio = cursor.getString(3);
-                evento.FechaFin = cursor.getString(4);
-                evento.Descripcion = cursor.getString(5);
-                evento.RutaFoto = cursor.getString(6);
-                lista.add(evento);
+                Actividad actividad = new Actividad();
+                actividad.Id = Integer.parseInt(cursor.getString(0));
+                actividad.Codigo = cursor.getString(1);
+                actividad.Nombre = cursor.getString(2);
+                actividad.Descripcion = cursor.getString(3);
+                actividad.RutaFoto = cursor.getString(4);
+                lista.add(actividad);
             }while(cursor.moveToNext());
             db.close();
             return lista;
@@ -152,5 +126,18 @@ public class Evento {
         return null;
     }
 
+    public Bitmap descargarImagen (){
 
+        URL imageUrl = null;
+        Bitmap imagen = null;
+        try{
+            imageUrl = new URL(Routes.directorio_imagenes+this.RutaFoto);
+            HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
+            conn.connect();
+            imagen = BitmapFactory.decodeStream(conn.getInputStream());
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
+        return imagen;
+    }
 }

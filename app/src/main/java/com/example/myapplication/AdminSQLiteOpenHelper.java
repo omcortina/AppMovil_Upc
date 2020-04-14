@@ -27,7 +27,16 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 "nombre text," +
                 "fecha_inicio text," +
                 "fecha_fin text," +
-                "descripcion text" +
+                "descripcion text," +
+                "ruta_foto text" +
+                ")");
+
+        db.execSQL("create table Actividad(" +
+                "id_actividad integer primary key," +
+                "codigo text," +
+                "nombre text," +
+                "descripcion text," +
+                "ruta_foto text" +
                 ")");
     }
 

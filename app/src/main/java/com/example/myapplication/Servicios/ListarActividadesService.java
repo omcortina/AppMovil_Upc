@@ -9,10 +9,10 @@ import android.widget.Toast;
 
 import com.example.myapplication.AdminSQLiteOpenHelper;
 import com.example.myapplication.Config.Config;
+import com.example.myapplication.Dominio.Actividad;
 import com.example.myapplication.Dominio.Evento;
-import com.example.myapplication.Dominio.Usuario;
+import com.example.myapplication.ListaActividades;
 import com.example.myapplication.ListaEventos;
-import com.example.myapplication.Login;
 import com.example.myapplication.Routes.Routes;
 
 import org.json.JSONArray;
@@ -20,34 +20,31 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class ListarEventosService extends AsyncTask<Void,Void,String> {
+public class ListarActividadesService extends AsyncTask<Void,Void,String> {
     Context context;
     ProgressDialog progressDialog;
     Boolean error;
 
-    public ListarEventosService(Context context){
+    public ListarActividadesService(Context context) {
         this.context = context;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = ProgressDialog.show(this.context,"Ingreso","Validando informacion...");
+        progressDialog = ProgressDialog.show(this.context,"Actividades","Validando informacion...");
     }
 
     @Override
     protected String doInBackground(Void... voids) {
 
-        String uri = Routes.listar_eventos;
+        String uri = Routes.listar_actividades;
         URL url = null;
         try {
             url = new URL(uri);
@@ -82,21 +79,19 @@ public class ListarEventosService extends AsyncTask<Void,Void,String> {
                 AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
                 SQLiteDatabase db = admin.getWritableDatabase();
 
-                db.execSQL("DELETE FROM Evento");
+                db.execSQL("DELETE FROM Actividad");
                 db.close();
 
                 for (int i=0; i<array.length(); i++){
                     JSONObject json = array.getJSONObject(i);
-                    Evento evento = new Evento();
-                    evento.setId(json.getInt("id_evento"));
-                    evento.setCodigo(json.getString("codigo"));
-                    evento.setNombre(json.getString("nombre"));
-                    evento.setDescripcion(json.getString("descripcion"));
-                    evento.setFechaInicio(json.getString("fecha_inicio"));
-                    evento.setFechaFin(json.getString("fecha_fin"));
-                    evento.setRutaFoto(json.getString("imagen"));
+                    Actividad actividad = new Actividad();
+                    actividad.setId(json.getInt("id_actividad"));
+                    actividad.setCodigo(json.getString("codigo"));
+                    actividad.setNombre(json.getString("nombre"));
+                    actividad.setDescripcion(json.getString("descripcion"));
+                    actividad.setRutaFoto(json.getString("imagen"));
 
-                    evento.Save(this.context);
+                    actividad.Save(this.context);
                 }
                 this.error = false;
                 return "ok";
@@ -122,10 +117,10 @@ public class ListarEventosService extends AsyncTask<Void,Void,String> {
         super.onPostExecute(respuesta);
         progressDialog.dismiss();
         if (error){
-            Toast.makeText(context, "No se pudieron cargar los eventos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "No se pudieron cargar las actividades", Toast.LENGTH_SHORT).show();
         }else{
             //aca puedes hacer un intent
-            Intent intent = new Intent(context, ListaEventos.class);
+            Intent intent = new Intent(context, ListaActividades.class);
             context.startActivity(intent);
         }
     }
