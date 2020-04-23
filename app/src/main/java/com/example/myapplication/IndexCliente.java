@@ -98,6 +98,8 @@ public class IndexCliente extends FragmentActivity implements OnMapReadyCallback
                 points.add(punto);
             }
 
+            
+
             lineOptions.addAll(points);
             lineOptions.width(2);
             lineOptions.color(Color.BLUE);
