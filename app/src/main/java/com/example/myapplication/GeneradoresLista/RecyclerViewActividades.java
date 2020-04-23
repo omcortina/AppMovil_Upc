@@ -22,14 +22,15 @@ import java.util.List;
 
 public class RecyclerViewActividades extends RecyclerView.Adapter<RecyclerViewActividades.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView txt_nombre_actividad;
-        private LinearLayout btn_mostrar_actividad, btn_actividad_favorita;
+        private TextView txt_nombre_actividad, txt_descripcion_actividad;
+        private LinearLayout btn_mostrar_sitios_actividad, btn_actividad_favorita;
         private ImageView img_actividad;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txt_nombre_actividad = (TextView) itemView.findViewById(R.id.txt_nombre_actividad);
-            btn_mostrar_actividad = (LinearLayout) itemView.findViewById(R.id.btn_mostrar_actividad);
+            txt_descripcion_actividad = (TextView) itemView.findViewById(R.id.txt_descripcion_actividad);
+            btn_mostrar_sitios_actividad = (LinearLayout) itemView.findViewById(R.id.btn_mostrar_sitios_actividad);
             btn_actividad_favorita = (LinearLayout) itemView.findViewById(R.id.btn_actividad_favorita);
             img_actividad = (ImageView) itemView.findViewById(R.id.img_actividad);
         }
@@ -51,16 +52,27 @@ public class RecyclerViewActividades extends RecyclerView.Adapter<RecyclerViewAc
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewActividades.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final Actividad actividad = listaActividades.get(position);
         holder.txt_nombre_actividad.setText(actividad.getNombre().toUpperCase());
-        Bitmap foto = actividad.descargarImagen();
+        holder.txt_descripcion_actividad.setText("Descripcion: "+actividad.getDescripcion());
         Picasso.get()
                 .load(Routes.directorio_imagenes+actividad.getRutaFoto())
                 //.resize(70,70)
                 //.placeholder(R)
                 //.transform(new CropCircleTransformation())
                 .into(holder.img_actividad);
+
+        holder.txt_nombre_actividad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(holder.txt_descripcion_actividad.getVisibility() == v.GONE ){
+                    holder.txt_descripcion_actividad.setVisibility(v.VISIBLE);
+                }else{
+                    holder.txt_descripcion_actividad.setVisibility(v.GONE);
+                }
+            }
+        });
     }
 
     @Override

@@ -4,27 +4,24 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 import com.example.myapplication.AdminSQLiteOpenHelper;
 import com.example.myapplication.Config.Config;
-import com.example.myapplication.Routes.Routes;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Actividad {
-    public int Id;
-    public String Codigo;
-    public String Nombre;
-    public String Descripcion;
-    public String RutaFoto;
+public class Sitio {
+    private int Id;
+    private String Codigo;
+    private String Nombre;
+    private String Direccion;
+    private String Descripcion;
+    private String Latitud;
+    private String Longitud;
+    private String Tipo;
 
-    public Actividad() {
+    public Sitio() {
     }
 
     public int getId() {
@@ -51,6 +48,14 @@ public class Actividad {
         Nombre = nombre;
     }
 
+    public String getDireccion() {
+        return Direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        Direccion = direccion;
+    }
+
     public String getDescripcion() {
         return Descripcion;
     }
@@ -59,12 +64,28 @@ public class Actividad {
         Descripcion = descripcion;
     }
 
-    public String getRutaFoto() {
-        return RutaFoto;
+    public String getLatitud() {
+        return Latitud;
     }
 
-    public void setRutaFoto(String rutaFoto) {
-        RutaFoto = rutaFoto;
+    public void setLatitud(String latitud) {
+        Latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return Longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        Longitud = longitud;
+    }
+
+    public String getTipo() {
+        return Tipo;
+    }
+
+    public void setTipo(String tipo) {
+        Tipo = tipo;
     }
 
     public void Save(Context context){
@@ -72,54 +93,62 @@ public class Actividad {
         SQLiteDatabase db = admin.getWritableDatabase();
 
         ContentValues registro = new ContentValues();
-        registro.put("id_actividad", this.Id);
+        registro.put("id_sitio", this.Id);
         registro.put("codigo", this.Codigo);
         registro.put("nombre", this.Nombre);
+        registro.put("direccion", this.Direccion);
         registro.put("descripcion", this.Descripcion);
-        registro.put("ruta_foto", this.RutaFoto);
-        db.insert("Actividad", null, registro);
+        registro.put("latitud", this.Latitud);
+        registro.put("longitud", this.Longitud);
+        registro.put("tipo", this.Tipo);
+
+        db.insert("Sitio", null, registro);
         db.close();
     }
 
-    public Actividad Find(Context context, int id){
+    public Sitio Find(Context context, int id){
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
         SQLiteDatabase db = admin.getWritableDatabase();
 
-        String sql = "select * from Actividad where id_actividad="+id;
+        String sql = "select * from Sitio where id_sitio="+id;
         Cursor cursor = db.rawQuery(sql, null);
 
         if (cursor.moveToFirst()){
             this.Id = Integer.parseInt(cursor.getString(0));
             this.Codigo = cursor.getString(1);
             this.Nombre = cursor.getString(2);
-            this.Descripcion = cursor.getString(3);
-            this.RutaFoto = cursor.getString(4);
-
+            this.Direccion = cursor.getString(3);
+            this.Descripcion = cursor.getString(4);
+            this.Latitud = cursor.getString(5);
+            this.Longitud = cursor.getString(6);
+            this.Tipo = cursor.getString(7);
             return this;
         }
         db.close();
         return null;
     }
 
-    public static List<Actividad> FindAll(Context context){
+    public static List<Sitio> FindAll(Context context){
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
         SQLiteDatabase db = admin.getWritableDatabase();
-        List<Actividad> lista = new ArrayList<>();
+        List<Sitio> lista = new ArrayList<>();
 
-        String sql = "select * from Actividad";
+        String sql = "select * from Sitio";
         Cursor cursor = db.rawQuery(sql, null);
 
         if (cursor.moveToFirst()){
             do{
-                Actividad actividad = new Actividad();
-                actividad.Id = Integer.parseInt(cursor.getString(0));
-                actividad.Codigo = cursor.getString(1);
-                actividad.Nombre = cursor.getString(2);
-                actividad.Descripcion = cursor.getString(3);
-                actividad.RutaFoto = cursor.getString(4);
-                lista.add(actividad);
+                Sitio sitio = new Sitio();
+                sitio.Id = Integer.parseInt(cursor.getString(0));
+                sitio.Codigo = cursor.getString(1);
+                sitio.Nombre = cursor.getString(2);
+                sitio.Direccion = cursor.getString(3);
+                sitio.Descripcion = cursor.getString(4);
+                sitio.Latitud = cursor.getString(5);
+                sitio.Longitud = cursor.getString(6);
+                sitio.Tipo = cursor.getString(7);
+                lista.add(sitio);
             }while(cursor.moveToNext());
-            db.close();
             return lista;
         }
         db.close();

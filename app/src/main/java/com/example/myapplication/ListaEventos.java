@@ -25,6 +25,4 @@ public class ListaEventos extends AppCompatActivity {
         adapter = new RecyclerViewEventos(Evento.FindAll(this), this);
         recyclerView.setAdapter(adapter);
     }
-
-
 }

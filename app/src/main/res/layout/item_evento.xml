@@ -7,111 +7,123 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
 
-        <ImageView
-            android:id="@+id/img_evento"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="275dp"
-            app:srcCompat="@drawable/jhgj" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_evento"
+                android:layout_width="match_parent"
+                android:layout_height="207dp"
+                app:srcCompat="@drawable/jhgj" />
+
+            <TextView
+                android:id="@+id/txt_nombre_evento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#99000000"
+                android:padding="10dp"
+                android:text="Nombre del evento"
+                android:textColor="@color/design_default_color_background"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_fecha_inicio_evento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="5dp"
+                android:text="Fecha Inicio"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txt_fecha_fin_evento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Fecha Fin"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txt_descripcion_evento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Descripcion"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:background="#FFFFFF"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/btn_mostrar_sitios_evento"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/icon_sites"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Sitios"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_evento_favorito"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <Button
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/icon_favoriteee" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Favoritos"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/txt_nombre_evento"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#99000000"
-        android:padding="10dp"
-        android:text="Nombre del evento"
-        android:textColor="@color/design_default_color_background"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/txt_fecha_inicio_evento"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:text="Fecha Inicio"
-        android:textSize="14sp"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/txt_fecha_fin_evento"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Fecha Fin"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/txt_descripcion_evento"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Descripcion"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:background="#FFFFFF"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/btn_mostrar_evento"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="#FFFFFF"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/icon_sites"
-                android:gravity="center" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Sitios"
-                android:textColor="#000000"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btn_evento_favorito"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="#FFFFFF"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <Button
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/icon_favoriteee" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Favoritos"
-                android:textColor="#000000"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-    </LinearLayout>
 
 </LinearLayout>

@@ -6,7 +6,9 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,6 +17,9 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.myapplication.Dominio.Sitio;
+import com.example.myapplication.Dominio.SitioEvento;
+import com.example.myapplication.Servicios.ListarActividadesService;
 import com.example.myapplication.Servicios.ListarEventosService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,6 +27,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class IndexCliente extends FragmentActivity implements OnMapReadyCallback {
 
@@ -37,6 +46,7 @@ public class IndexCliente extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         View itemEvento = (View) findViewById(R.id.item_eventos);
+        View itemActividad = (View) findViewById(R.id.item_actividades);
 
         itemEvento.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +56,13 @@ public class IndexCliente extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        itemActividad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ListarActividadesService servicio = new ListarActividadesService(IndexCliente.this);
+                servicio.execute();
+            }
+        });
     }
 
 
@@ -61,12 +78,32 @@ public class IndexCliente extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(10.4645477, -73.275759);
+        PolylineOptions lineOptions = null;
+        ArrayList<LatLng> points = null;
         LatLng valledupar = new LatLng(getMyPosition().getLatitude(), getMyPosition().getLongitude());
         mMap.addMarker(new MarkerOptions().position(valledupar).title("Valledupar"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(valledupar,16));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(valledupar,15));
+        Intent intent = getIntent();
+        int id_evento = intent.getIntExtra("id_evento",0);
+        if (id_evento != 0){
+            points = new ArrayList<LatLng>();
+            lineOptions = new PolylineOptions();
+            List<Sitio> array_sitios = SitioEvento.FindAllSitiosPorEvento(this, id_evento);
+            points.add(valledupar);
+            for(Sitio s: array_sitios){
+                double latitud = Double.parseDouble(s.getLatitud());
+                double longitud = Double.parseDouble(s.getLongitud());
+                LatLng punto = new LatLng(latitud, longitud);
+                mMap.addMarker(new MarkerOptions().position(punto).title(s.getNombre()));
+                points.add(punto);
+            }
+
+            lineOptions.addAll(points);
+            lineOptions.width(2);
+            lineOptions.color(Color.BLUE);
+
+            mMap.addPolyline(lineOptions);
+        }
     }
 
     public Location getMyPosition(){

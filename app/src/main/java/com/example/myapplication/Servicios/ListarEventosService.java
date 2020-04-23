@@ -10,6 +10,8 @@ import android.widget.Toast;
 import com.example.myapplication.AdminSQLiteOpenHelper;
 import com.example.myapplication.Config.Config;
 import com.example.myapplication.Dominio.Evento;
+import com.example.myapplication.Dominio.Sitio;
+import com.example.myapplication.Dominio.SitioEvento;
 import com.example.myapplication.Dominio.Usuario;
 import com.example.myapplication.ListaEventos;
 import com.example.myapplication.Login;
@@ -28,6 +30,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class ListarEventosService extends AsyncTask<Void,Void,String> {
     Context context;
@@ -73,10 +76,6 @@ public class ListarEventosService extends AsyncTask<Void,Void,String> {
                 String jo = "";
                 jo = sb.toString();
 
-                /*JSONArray jo_array = null;
-                jo_array = new JSONArray(json);
-                 */
-
                 JSONArray array = null;
                 array = new JSONArray(jo);
                 AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
@@ -96,6 +95,27 @@ public class ListarEventosService extends AsyncTask<Void,Void,String> {
                     evento.setFechaFin(json.getString("fecha_fin"));
                     evento.setRutaFoto(json.getString("imagen"));
 
+                    SitioEvento.EliminarSitiosDelEvento(context, evento.getId());
+
+                    JSONArray array_sitios = json.getJSONArray("sitios");
+                    for (int j=0; j<array_sitios.length(); j++) {
+                        Sitio sitio = new Sitio();
+                        SitioEvento sitioEvento = new SitioEvento();
+                        JSONObject json_sitio = array_sitios.getJSONObject(j);
+                        sitio.setId(json_sitio.getInt("id_sitio"));
+                        sitio.setCodigo(json_sitio.getString("codigo"));
+                        sitio.setNombre(json_sitio.getString("nombre"));
+                        sitio.setDireccion(json_sitio.getString("direccion"));
+                        sitio.setDescripcion(json_sitio.getString("descripcion"));
+                        sitio.setLatitud(json_sitio.getString("latitud"));
+                        sitio.setLongitud(json_sitio.getString("longitud"));
+                        sitio.setTipo(json_sitio.getString("tipo"));
+                        sitio.Save(this.context);
+
+                        sitioEvento.setId_evento(evento.getId());
+                        sitioEvento.setId_sitio(sitio.getId());
+                        sitioEvento.Save(this.context);
+                    }
                     evento.Save(this.context);
                 }
                 this.error = false;
@@ -122,11 +142,9 @@ public class ListarEventosService extends AsyncTask<Void,Void,String> {
         super.onPostExecute(respuesta);
         progressDialog.dismiss();
         if (error){
-            Toast.makeText(context, "No se pudieron cargar los eventos", Toast.LENGTH_SHORT).show();
-        }else{
-            //aca puedes hacer un intent
+            Toast.makeText(context, "No se pudieron cargar los eventos de forma on-line", Toast.LENGTH_SHORT).show();
+        }
             Intent intent = new Intent(context, ListaEventos.class);
             context.startActivity(intent);
-        }
     }
 }

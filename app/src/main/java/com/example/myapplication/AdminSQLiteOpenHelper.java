@@ -21,6 +21,17 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 "tipo_usuario text" +
                 ")");
 
+        db.execSQL("create table Sitio(" +
+                "id_sitio integer primary key," +
+                "codigo text," +
+                "nombre text," +
+                "direccion text," +
+                "descripcion text," +
+                "latitud text," +
+                "longitud text," +
+                "tipo text" +
+                ")");
+
         db.execSQL("create table Evento(" +
                 "id_evento integer primary key," +
                 "codigo text," +
@@ -37,6 +48,18 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 "nombre text," +
                 "descripcion text," +
                 "ruta_foto text" +
+                ")");
+
+        db.execSQL("create table SitioEvento(" +
+                "id_sitio_evento integer primary key autoincrement," +
+                "id_sitio text," +
+                "id_evento text" +
+                ")");
+
+        db.execSQL("create table SitioActividad(" +
+                "id_sitio_actividad integer primary key autoincrement," +
+                "id_sitio text," +
+                "id_actividad text" +
                 ")");
     }
 

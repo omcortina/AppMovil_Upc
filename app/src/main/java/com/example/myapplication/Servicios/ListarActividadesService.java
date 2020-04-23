@@ -11,6 +11,9 @@ import com.example.myapplication.AdminSQLiteOpenHelper;
 import com.example.myapplication.Config.Config;
 import com.example.myapplication.Dominio.Actividad;
 import com.example.myapplication.Dominio.Evento;
+import com.example.myapplication.Dominio.Sitio;
+import com.example.myapplication.Dominio.SitioActividad;
+import com.example.myapplication.Dominio.SitioEvento;
 import com.example.myapplication.ListaActividades;
 import com.example.myapplication.ListaEventos;
 import com.example.myapplication.Routes.Routes;
@@ -70,10 +73,6 @@ public class ListarActividadesService extends AsyncTask<Void,Void,String> {
                 String jo = "";
                 jo = sb.toString();
 
-                /*JSONArray jo_array = null;
-                jo_array = new JSONArray(json);
-                 */
-
                 JSONArray array = null;
                 array = new JSONArray(jo);
                 AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
@@ -91,6 +90,26 @@ public class ListarActividadesService extends AsyncTask<Void,Void,String> {
                     actividad.setDescripcion(json.getString("descripcion"));
                     actividad.setRutaFoto(json.getString("imagen"));
 
+                    SitioActividad.EliminarSitioActividad(context, actividad.getId());
+                    Sitio sitio = new Sitio();
+                    SitioActividad sitioActividad = new SitioActividad();
+                    JSONArray array_sitios = json.getJSONArray("sitios");
+                    for (int j=0; j<array_sitios.length(); j++) {
+                        JSONObject json_sitio = array_sitios.getJSONObject(j);
+                        sitio.setId(json_sitio.getInt("id_sitio"));
+                        sitio.setCodigo(json_sitio.getString("codigo"));
+                        sitio.setNombre(json_sitio.getString("nombre"));
+                        sitio.setDireccion(json_sitio.getString("direccion"));
+                        sitio.setDescripcion(json_sitio.getString("descripcion"));
+                        sitio.setLatitud(json_sitio.getString("latitud"));
+                        sitio.setLongitud(json_sitio.getString("longitud"));
+                        sitio.setTipo(json_sitio.getString("tipo"));
+                        sitio.Save(this.context);
+
+                        sitioActividad.setId_actividad(json.getInt("id_actividad"));
+                        sitioActividad.setId_sitio(json_sitio.getInt("id_sitio"));
+                        sitioActividad.Save(this.context);
+                    }
                     actividad.Save(this.context);
                 }
                 this.error = false;

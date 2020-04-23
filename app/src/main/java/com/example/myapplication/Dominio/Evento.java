@@ -26,6 +26,15 @@ public class Evento {
     private String FechaFin;
     private String Descripcion;
     private String RutaFoto;
+    private ArrayList<Sitio> Sitios;
+
+    public ArrayList<Sitio> getSitios() {
+        return Sitios;
+    }
+
+    public void setSitios(ArrayList<Sitio> sitios) {
+        Sitios = sitios;
+    }
 
     public Evento() {
     }
@@ -99,7 +108,6 @@ public class Evento {
         registro.put("descripcion", this.Descripcion);
         registro.put("ruta_foto", this.RutaFoto);
 
-
         db.insert("Evento", null, registro);
         db.close();
     }
@@ -119,9 +127,9 @@ public class Evento {
             this.FechaFin = cursor.getString(4);
             this.Descripcion = cursor.getString(5);
             this.RutaFoto = cursor.getString(6);
-
             return this;
         }
+        db.close();
         return null;
     }
 
@@ -145,7 +153,6 @@ public class Evento {
                 evento.RutaFoto = cursor.getString(6);
                 lista.add(evento);
             }while(cursor.moveToNext());
-            db.close();
             return lista;
         }
         db.close();

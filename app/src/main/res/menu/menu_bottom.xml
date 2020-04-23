@@ -6,13 +6,13 @@
         android:title="Eventos"/>
 
     <item
-        android:id="@+id/item_sitios"
-        android:icon="@drawable/icon_sites"
-        android:title="Sitios"/>
-
-    <item
         android:id="@+id/item_actividades"
         android:icon="@drawable/icon_activity"
         android:title="Actividades"/>
+
+    <item
+        android:id="@+id/item_sitios"
+        android:icon="@drawable/icon_sites"
+        android:title="Sitios"/>
 
 </menu>

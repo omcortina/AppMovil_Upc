@@ -29,7 +29,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:background="#FFFFFF"
-                android:onClick="ir"
                 app:itemIconTint="@color/design_default_color_on_secondary"
                 app:itemTextColor="#000000"
                 app:menu="@menu/menu_bottom" />
