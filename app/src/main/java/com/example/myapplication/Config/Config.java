@@ -1,5 +1,5 @@
 package com.example.myapplication.Config;
 
 public class Config {
-    public static String database_name = "aponte1";
+    public static String database_name = "aponte1FG";
 }

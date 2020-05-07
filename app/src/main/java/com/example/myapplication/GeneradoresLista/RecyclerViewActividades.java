@@ -1,6 +1,7 @@
 package com.example.myapplication.GeneradoresLista;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Dominio.Actividad;
+import com.example.myapplication.IndexCliente;
 import com.example.myapplication.R;
 import com.example.myapplication.Routes.Routes;
 import com.squareup.picasso.Picasso;
@@ -69,6 +71,15 @@ public class RecyclerViewActividades extends RecyclerView.Adapter<RecyclerViewAc
                 }else{
                     holder.txt_descripcion_actividad.setVisibility(v.GONE);
                 }
+            }
+        });
+        holder.btn_mostrar_sitios_actividad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, IndexCliente.class);
+                int id_actividad = actividad.getId();
+                intent.putExtra("id_actividad", id_actividad);
+                context.startActivity(intent);
             }
         });
     }

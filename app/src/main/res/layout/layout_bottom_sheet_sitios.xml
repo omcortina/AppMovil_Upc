@@ -98,6 +98,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="25dp"
             android:text="Añadir a favoritos"
+            android:textColor="#050505"
             android:textSize="15dp" />
     </LinearLayout>
 

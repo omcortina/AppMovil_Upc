@@ -2,10 +2,14 @@ package com.example.myapplication.Dominio;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.myapplication.AdminSQLiteOpenHelper;
 import com.example.myapplication.Config.Config;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SitioActividad {
     private int Id;
@@ -59,5 +63,23 @@ public class SitioActividad {
         db.execSQL(sql_sitio);
         String sql = "delete from SitioActividad where id_actividad ="+id_actividad;
         db.execSQL(sql);
+    }
+
+    public static List<Sitio> FindAllSitiosPorActividad(Context context, int id_actividad){
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
+        SQLiteDatabase db = admin.getWritableDatabase();
+        List<Sitio> lista = new ArrayList<>();
+        String sql = "select id_sitio from SitioActividad where id_actividad="+id_actividad;
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor.moveToFirst()){
+            do{
+                int id_sitio = cursor.getInt(0);
+                lista.add(new Sitio().Find(context, id_sitio));
+            }while(cursor.moveToNext());
+            return lista;
+        }
+        db.close();
+        return null;
+
     }
 }

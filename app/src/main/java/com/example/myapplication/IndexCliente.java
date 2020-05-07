@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.Dominio.Sitio;
+import com.example.myapplication.Dominio.SitioActividad;
 import com.example.myapplication.Dominio.SitioEvento;
 import com.example.myapplication.Routes.Routes;
 import com.example.myapplication.Servicios.ListarActividadesService;
@@ -157,6 +158,52 @@ public class IndexCliente extends FragmentActivity implements OnMapReadyCallback
             });
         }
 
+        Intent ver_sitio_actividad = getIntent();
+        int id_actividad = ver_sitio_actividad.getIntExtra("id_actividad",0);
+        if (id_actividad != 0){
+            points = new ArrayList<LatLng>();
+            //lineOptions = new PolylineOptions();
+            List<Sitio> array_sitios_actividad = SitioActividad.FindAllSitiosPorActividad(this, id_actividad);
+            points.add(posicionActual);
+            for(Sitio s: array_sitios_actividad){
+                double latitud = Double.parseDouble(s.getLatitud());
+                double longitud = Double.parseDouble(s.getLongitud());
+                LatLng punto = new LatLng(latitud, longitud);
+                mMap.addMarker(new MarkerOptions().position(punto).title(s.getNombre()));
+                points.add(punto);
+            }
+
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    LatLng posicion_sitio = marker.getPosition();
+                    Sitio sitio = Sitio.FindMarkerSitio(IndexCliente.this, posicion_sitio.latitude, posicion_sitio.longitude);
+                    if(sitio != null){
+                        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(IndexCliente.this, R.style.BottomSheetDialogTheme);
+                        View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_bottom_sheet_sitios, (LinearLayout) findViewById(R.id.bottom_sheet_sitio));
+                        txt_nombre_sitio = bottomSheetView.findViewById(R.id.txt_nombre_sitio);
+                        txt_direccion_sitio = bottomSheetView.findViewById(R.id.txt_direccion_sitio);
+                        txt_descripcion_sitio = bottomSheetView.findViewById(R.id.txt_descripcion_sitio);
+                        imagen_sitio = bottomSheetView.findViewById(R.id.imagen_sitio);
+
+                        Picasso.get()
+                                .load(Routes.directorio_imagenes+sitio.getRutaFoto())
+                                //.resize(70,70)
+                                .placeholder(R.drawable.loginn)
+                                //.transform(new CropCircleTransformation())
+                                .into(imagen_sitio);
+                        txt_nombre_sitio.setText(sitio.getNombre());
+                        txt_direccion_sitio.setText(sitio.getDireccion());
+                        txt_descripcion_sitio.setText(sitio.getDescripcion());
+
+                        bottomSheetDialog.setContentView(bottomSheetView);
+                        bottomSheetDialog.show();
+                    }
+                    return true;
+                }
+            });
+        }
+
         Intent ubicar_sitio = getIntent();
         int id_sitio = ubicar_sitio.getIntExtra("id_sitio", 0);
         if(id_sitio != 0){
@@ -234,7 +281,7 @@ public class IndexCliente extends FragmentActivity implements OnMapReadyCallback
         }
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         return  location;
     }
 
