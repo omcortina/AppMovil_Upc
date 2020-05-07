@@ -1,10 +1,7 @@
 package com.example.myapplication.GeneradoresLista;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +24,7 @@ import java.util.List;
 public class RecyclerViewEventos extends RecyclerView.Adapter<RecyclerViewEventos.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView txt_nombre_evento, txt_fecha_inicio_evento, txt_fecha_fin_evento, txt_descripcion_evento;
-        private LinearLayout btn_mostrar_sitios_evento, btn_evento_favorito;
+        private LinearLayout btn_mostrar_sitios_evento, btn_evento_info;
         private ImageView img_evento;
 
         public ViewHolder(@NonNull View itemView) {
@@ -37,7 +34,7 @@ public class RecyclerViewEventos extends RecyclerView.Adapter<RecyclerViewEvento
             txt_fecha_fin_evento = (TextView) itemView.findViewById(R.id.txt_fecha_fin_evento);
             txt_descripcion_evento = (TextView) itemView.findViewById(R.id.txt_descripcion_evento);
             btn_mostrar_sitios_evento = (LinearLayout) itemView.findViewById(R.id.btn_mostrar_sitios_evento);
-            btn_evento_favorito = (LinearLayout) itemView.findViewById(R.id.btn_evento_favorito);
+            btn_evento_info = (LinearLayout) itemView.findViewById(R.id.btn_evento_info);
             img_evento = (ImageView) itemView.findViewById(R.id.img_evento);
         }
     }
@@ -74,7 +71,7 @@ public class RecyclerViewEventos extends RecyclerView.Adapter<RecyclerViewEvento
                 //.transform(new CropCircleTransformation())
                 .into(holder.img_evento);
 
-        holder.txt_nombre_evento.setOnClickListener(new View.OnClickListener() {
+        holder.btn_evento_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(holder.txt_fecha_inicio_evento.getVisibility() == v.GONE ){

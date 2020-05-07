@@ -1,7 +1,6 @@
 package com.example.myapplication.GeneradoresLista;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Dominio.Actividad;
-import com.example.myapplication.Dominio.Evento;
 import com.example.myapplication.R;
 import com.example.myapplication.Routes.Routes;
 import com.squareup.picasso.Picasso;
@@ -23,7 +21,7 @@ import java.util.List;
 public class RecyclerViewActividades extends RecyclerView.Adapter<RecyclerViewActividades.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView txt_nombre_actividad, txt_descripcion_actividad;
-        private LinearLayout btn_mostrar_sitios_actividad, btn_actividad_favorita;
+        private LinearLayout btn_mostrar_sitios_actividad, btn_actividad_info;
         private ImageView img_actividad;
 
         public ViewHolder(@NonNull View itemView) {
@@ -31,7 +29,7 @@ public class RecyclerViewActividades extends RecyclerView.Adapter<RecyclerViewAc
             txt_nombre_actividad = (TextView) itemView.findViewById(R.id.txt_nombre_actividad);
             txt_descripcion_actividad = (TextView) itemView.findViewById(R.id.txt_descripcion_actividad);
             btn_mostrar_sitios_actividad = (LinearLayout) itemView.findViewById(R.id.btn_mostrar_sitios_actividad);
-            btn_actividad_favorita = (LinearLayout) itemView.findViewById(R.id.btn_actividad_favorita);
+            btn_actividad_info = (LinearLayout) itemView.findViewById(R.id.btn_actividad_info);
             img_actividad = (ImageView) itemView.findViewById(R.id.img_actividad);
         }
     }
@@ -63,7 +61,7 @@ public class RecyclerViewActividades extends RecyclerView.Adapter<RecyclerViewAc
                 //.transform(new CropCircleTransformation())
                 .into(holder.img_actividad);
 
-        holder.txt_nombre_actividad.setOnClickListener(new View.OnClickListener() {
+        holder.btn_actividad_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(holder.txt_descripcion_actividad.getVisibility() == v.GONE ){

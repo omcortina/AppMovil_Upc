@@ -97,7 +97,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/btn_evento_favorito"
+                    android:id="@+id/btn_evento_info"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -111,12 +111,12 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/icon_favoriteee" />
+                        android:background="@drawable/icon_info" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Favoritos"
+                        android:text="Ver más"
                         android:textColor="#000000"
                         android:textStyle="bold" />
                 </LinearLayout>

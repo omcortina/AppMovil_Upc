@@ -41,7 +41,7 @@
                 android:layout_margin="5dp"
                 android:text="TextView"
                 android:textSize="16sp"
-                tools:visibility="gone" />
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,7 +79,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/btn_actividad_favorita"
+                    android:id="@+id/btn_actividad_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -94,14 +94,14 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/icon_favoriteee"
+                        android:background="@drawable/icon_info"
                         android:gravity="center" />
 
                     <TextView
                         android:id="@+id/textView8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Favoritos"
+                        android:text="Ver más"
                         android:textColor="#000000"
                         android:textStyle="bold" />
                 </LinearLayout>

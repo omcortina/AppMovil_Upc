@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.myapplication.AdminSQLiteOpenHelper;
 import com.example.myapplication.Config.Config;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,8 @@ public class Sitio {
     private String Descripcion;
     private String Latitud;
     private String Longitud;
-    private String Tipo;
+    private String RutaFoto;
+    private int IdDominioTipo;
 
     public Sitio() {
     }
@@ -80,12 +82,20 @@ public class Sitio {
         Longitud = longitud;
     }
 
-    public String getTipo() {
-        return Tipo;
+    public String getRutaFoto() {
+        return RutaFoto;
     }
 
-    public void setTipo(String tipo) {
-        Tipo = tipo;
+    public void setRutaFoto(String rutaFoto) {
+        RutaFoto = rutaFoto;
+    }
+
+    public int getIdDominioTipo() {
+        return IdDominioTipo;
+    }
+
+    public void setIdDominioTipo(int idDominioTipo) {
+        IdDominioTipo = idDominioTipo;
     }
 
     public void Save(Context context){
@@ -100,29 +110,81 @@ public class Sitio {
         registro.put("descripcion", this.Descripcion);
         registro.put("latitud", this.Latitud);
         registro.put("longitud", this.Longitud);
-        registro.put("tipo", this.Tipo);
+        registro.put("ruta_foto", this.RutaFoto);
+        registro.put("id_dominio_tipo", this.IdDominioTipo);
 
         db.insert("Sitio", null, registro);
         db.close();
     }
 
-    public Sitio Find(Context context, int id){
+    public static List<Sitio> FindByTipo(Context context, int id_dominio_tipo){
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
         SQLiteDatabase db = admin.getWritableDatabase();
+        List<Sitio> lista = new ArrayList<>();
 
-        String sql = "select * from Sitio where id_sitio="+id;
+        String sql = "select * from Sitio where id_dominio_tipo="+id_dominio_tipo;
         Cursor cursor = db.rawQuery(sql, null);
 
         if (cursor.moveToFirst()){
-            this.Id = Integer.parseInt(cursor.getString(0));
-            this.Codigo = cursor.getString(1);
-            this.Nombre = cursor.getString(2);
-            this.Direccion = cursor.getString(3);
-            this.Descripcion = cursor.getString(4);
-            this.Latitud = cursor.getString(5);
-            this.Longitud = cursor.getString(6);
-            this.Tipo = cursor.getString(7);
-            return this;
+            do{
+                Sitio sitio = new Sitio();
+                sitio.Id = Integer.parseInt(cursor.getString(0));
+                sitio.Codigo = cursor.getString(1);
+                sitio.Nombre = cursor.getString(2);
+                sitio.Direccion = cursor.getString(3);
+                sitio.Descripcion = cursor.getString(4);
+                sitio.Latitud = cursor.getString(5);
+                sitio.Longitud = cursor.getString(6);
+                sitio.RutaFoto = cursor.getString(7);
+                sitio.IdDominioTipo = cursor.getInt(8);
+                lista.add(sitio);
+            }while(cursor.moveToNext());
+        }
+        db.close();
+        return lista;
+    }
+
+    public static Sitio Find(Context context, int id_sitio){
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
+        SQLiteDatabase db = admin.getWritableDatabase();
+
+        String sql = "select * from Sitio where id_sitio="+id_sitio;
+        Cursor cursor = db.rawQuery(sql, null);
+        Sitio sitio = new Sitio();
+        if (cursor.moveToFirst()){
+            sitio.Id = cursor.getInt(0);
+            sitio.Codigo = cursor.getString(1);
+            sitio.Nombre = cursor.getString(2);
+            sitio.Direccion = cursor.getString(3);
+            sitio.Descripcion = cursor.getString(4);
+            sitio.Latitud = cursor.getString(5);
+            sitio.Longitud = cursor.getString(6);
+            sitio.RutaFoto = cursor.getString(7);
+            sitio.IdDominioTipo = cursor.getInt(8);
+            return sitio;
+        }
+        db.close();
+        return null;
+    }
+
+    public static Sitio FindMarkerSitio(Context context, double latitud, double longitud){
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
+        SQLiteDatabase db = admin.getWritableDatabase();
+
+        String sql = "select * from Sitio where latitud="+latitud+" and longitud="+longitud;
+        Cursor cursor = db.rawQuery(sql, null);
+        Sitio sitio = new Sitio();
+        if (cursor.moveToFirst()){
+            sitio.Id = cursor.getInt(0);
+            sitio.Codigo = cursor.getString(1);
+            sitio.Nombre = cursor.getString(2);
+            sitio.Direccion = cursor.getString(3);
+            sitio.Descripcion = cursor.getString(4);
+            sitio.Latitud = cursor.getString(5);
+            sitio.Longitud = cursor.getString(6);
+            sitio.RutaFoto = cursor.getString(7);
+            sitio.IdDominioTipo = cursor.getInt(8);
+            return sitio;
         }
         db.close();
         return null;
@@ -146,12 +208,12 @@ public class Sitio {
                 sitio.Descripcion = cursor.getString(4);
                 sitio.Latitud = cursor.getString(5);
                 sitio.Longitud = cursor.getString(6);
-                sitio.Tipo = cursor.getString(7);
+                sitio.RutaFoto = cursor.getString(7);
+                sitio.IdDominioTipo = cursor.getInt(8);
                 lista.add(sitio);
             }while(cursor.moveToNext());
-            return lista;
         }
         db.close();
-        return null;
+        return lista;
     }
 }

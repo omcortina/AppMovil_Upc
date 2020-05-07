@@ -29,7 +29,13 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
                 "descripcion text," +
                 "latitud text," +
                 "longitud text," +
-                "tipo text" +
+                "ruta_foto text," +
+                "id_dominio_tipo integer" +
+                ")");
+
+        db.execSQL("create table Dominio(" +
+                "id_dominio integer primary key," +
+                "nombre text" +
                 ")");
 
         db.execSQL("create table Evento(" +

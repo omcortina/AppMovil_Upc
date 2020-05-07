@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ListaActividades"></activity>
+        <activity android:name=".ListaSitios"></activity>
+        <activity android:name=".ListaActividades" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -44,7 +45,7 @@
             android:label="Second Activity"
             android:parentActivityName=".Login" />
         <activity android:name=".InicioAdmin" />
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Login" />
         <activity android:name=".MainActivity" />
     </application>
 

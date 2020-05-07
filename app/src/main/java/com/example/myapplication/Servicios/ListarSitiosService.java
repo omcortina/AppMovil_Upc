@@ -9,13 +9,9 @@ import android.widget.Toast;
 
 import com.example.myapplication.AdminSQLiteOpenHelper;
 import com.example.myapplication.Config.Config;
-import com.example.myapplication.Dominio.Actividad;
-import com.example.myapplication.Dominio.Evento;
+import com.example.myapplication.Dominio.Dominio;
 import com.example.myapplication.Dominio.Sitio;
-import com.example.myapplication.Dominio.SitioActividad;
-import com.example.myapplication.Dominio.SitioEvento;
-import com.example.myapplication.ListaActividades;
-import com.example.myapplication.ListaEventos;
+import com.example.myapplication.ListaSitios;
 import com.example.myapplication.Routes.Routes;
 
 import org.json.JSONArray;
@@ -29,25 +25,25 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class ListarActividadesService extends AsyncTask<Void,Void,String> {
+public class ListarSitiosService extends AsyncTask<Void,Void,String> {
     Context context;
     ProgressDialog progressDialog;
     Boolean error;
 
-    public ListarActividadesService(Context context) {
+    public ListarSitiosService(Context context) {
         this.context = context;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = ProgressDialog.show(this.context,"Actividades","Validando informacion...");
+        progressDialog = ProgressDialog.show(this.context,"Sitios","Validando informacion...");
     }
 
     @Override
     protected String doInBackground(Void... voids) {
 
-        String uri = Routes.listar_actividades;
+        String uri = Routes.listar_sitios;
         URL url = null;
         try {
             url = new URL(uri);
@@ -73,45 +69,44 @@ public class ListarActividadesService extends AsyncTask<Void,Void,String> {
                 String jo = "";
                 jo = sb.toString();
 
-                JSONArray array = null;
-                array = new JSONArray(jo);
+                JSONObject response = null;
+                response = new JSONObject(jo);
+
                 AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(context, Config.database_name, null, 1);
                 SQLiteDatabase db = admin.getWritableDatabase();
 
-                db.execSQL("DELETE FROM Actividad");
+                db.execSQL("DELETE FROM Dominio");
+                db.execSQL("DELETE FROM Sitio");
                 db.close();
 
-                for (int i=0; i<array.length(); i++){
-                    JSONObject json = array.getJSONObject(i);
-                    Actividad actividad = new Actividad();
-                    actividad.setId(json.getInt("id_actividad"));
-                    actividad.setCodigo(json.getString("codigo"));
-                    actividad.setNombre(json.getString("nombre"));
-                    actividad.setDescripcion(json.getString("descripcion"));
-                    actividad.setRutaFoto(json.getString("imagen"));
-
-                    SitioActividad.EliminarSitioActividad(context, actividad.getId());
+                JSONArray array_sitios = response.getJSONArray("Sitios");
+                for (int i=0; i<array_sitios.length(); i++){
+                    JSONObject json = array_sitios.getJSONObject(i);
                     Sitio sitio = new Sitio();
-                    SitioActividad sitioActividad = new SitioActividad();
-                    JSONArray array_sitios = json.getJSONArray("sitios");
-                    for (int j=0; j<array_sitios.length(); j++) {
-                        JSONObject json_sitio = array_sitios.getJSONObject(j);
-                        sitio.setId(json_sitio.getInt("id_sitio"));
-                        sitio.setCodigo(json_sitio.getString("codigo"));
-                        sitio.setNombre(json_sitio.getString("nombre"));
-                        sitio.setDireccion(json_sitio.getString("direccion"));
-                        sitio.setDescripcion(json_sitio.getString("descripcion"));
-                        sitio.setLatitud(json_sitio.getString("latitud"));
-                        sitio.setLongitud(json_sitio.getString("longitud"));
-                        sitio.setRutaFoto(json_sitio.getString("imagen"));
-                        sitio.setIdDominioTipo(json_sitio.getInt("id_dominio_tipo"));
-                        sitio.Save(this.context);
+                    sitio.setId(json.getInt("id_sitio"));
+                    sitio.setCodigo(json.getString("codigo"));
+                    sitio.setNombre(json.getString("nombre"));
+                    sitio.setDireccion(json.getString("direccion"));
+                    sitio.setDescripcion(json.getString("descripcion"));
+                    sitio.setLatitud(json.getString("latitud"));
+                    sitio.setLongitud(json.getString("longitud"));
+                    sitio.setRutaFoto(json.getString("imagen"));
+                    sitio.setIdDominioTipo(json.getInt("id_dominio_tipo"));
+                    sitio.Save(this.context);
+                }
 
-                        sitioActividad.setId_actividad(json.getInt("id_actividad"));
-                        sitioActividad.setId_sitio(json_sitio.getInt("id_sitio"));
-                        sitioActividad.Save(this.context);
-                    }
-                    actividad.Save(this.context);
+                Dominio tipo_sitio_todos = new Dominio();
+                tipo_sitio_todos.setId(0);
+                tipo_sitio_todos.setNombre("Todos");
+                tipo_sitio_todos.Save(this.context);
+
+                JSONArray array_tipos_sitios = response.getJSONArray("Tipos");
+                for (int j=0; j<array_tipos_sitios.length(); j++){
+                    JSONObject json = array_tipos_sitios.getJSONObject(j);
+                    Dominio dominio = new Dominio();
+                    dominio.setId(json.getInt("id_dominio"));
+                    dominio.setNombre(json.getString("nombre"));
+                    dominio.Save(this.context);
                 }
                 this.error = false;
                 return "ok";
@@ -137,11 +132,9 @@ public class ListarActividadesService extends AsyncTask<Void,Void,String> {
         super.onPostExecute(respuesta);
         progressDialog.dismiss();
         if (error){
-            Toast.makeText(context, "No se pudieron cargar las actividades", Toast.LENGTH_SHORT).show();
-        }else{
-            //aca puedes hacer un intent
-            Intent intent = new Intent(context, ListaActividades.class);
-            context.startActivity(intent);
+            Toast.makeText(context, "No se pudieron cargar los sitios de forma on-line", Toast.LENGTH_SHORT).show();
         }
+        Intent intent = new Intent(context, ListaSitios.class);
+        context.startActivity(intent);
     }
 }

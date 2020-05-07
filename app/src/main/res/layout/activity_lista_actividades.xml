@@ -18,7 +18,7 @@
             android:background="#339240"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            app:title="@string/title_toolbar"
+            app:title="Actividades"
             app:titleTextColor="#FFFFFF" />
 
         <androidx.recyclerview.widget.RecyclerView

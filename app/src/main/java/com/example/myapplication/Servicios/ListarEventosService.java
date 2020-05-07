@@ -44,7 +44,7 @@ public class ListarEventosService extends AsyncTask<Void,Void,String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = ProgressDialog.show(this.context,"Ingreso","Validando informacion...");
+        progressDialog = ProgressDialog.show(this.context,"Eventos","Validando informacion...");
     }
 
     @Override
@@ -109,7 +109,8 @@ public class ListarEventosService extends AsyncTask<Void,Void,String> {
                         sitio.setDescripcion(json_sitio.getString("descripcion"));
                         sitio.setLatitud(json_sitio.getString("latitud"));
                         sitio.setLongitud(json_sitio.getString("longitud"));
-                        sitio.setTipo(json_sitio.getString("tipo"));
+                        sitio.setRutaFoto(json_sitio.getString("imagen"));
+                        sitio.setIdDominioTipo(json_sitio.getInt("id_dominio_tipo"));
                         sitio.Save(this.context);
 
                         sitioEvento.setId_evento(evento.getId());
@@ -144,7 +145,7 @@ public class ListarEventosService extends AsyncTask<Void,Void,String> {
         if (error){
             Toast.makeText(context, "No se pudieron cargar los eventos de forma on-line", Toast.LENGTH_SHORT).show();
         }
-            Intent intent = new Intent(context, ListaEventos.class);
-            context.startActivity(intent);
+        Intent intent = new Intent(context, ListaEventos.class);
+        context.startActivity(intent);
     }
 }
